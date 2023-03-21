@@ -9,7 +9,7 @@ e = {
 }
 
 from edit_img import crop_image
-from edit_img import mask_image
+from edit_img import mask_img
 
 def lambda_hanlder(event, context):
     coord_class = event['body']['class']
@@ -21,13 +21,16 @@ def lambda_hanlder(event, context):
     if action == 'crop':
         for dims in coords:
             if coord_class in dims:
+                print(dims, 'dims sent to edit_img')
                 s3url = crop_image(img, buk, dims)
                 return s3url
+            
     if action == 'mask':
         for dims in coords:
             if coord_class in dims:
-                s3url = mask_image(img, buk, dims)
+                s3url = mask_img(img, buk, dims)
                 return s3url
     
 
 i = lambda_hanlder(e,context=None)
+print(i)
