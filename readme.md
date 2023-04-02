@@ -6,7 +6,7 @@ action function built to utalize data extracted from user page data
 ## classes: 
 - text: 2.0
 - margin: 1.0
-- image: 3.0
+- image: 0.0
 
 ## actions:
 - crop to class
@@ -20,7 +20,7 @@ TODO: impliment alternative crop-to function that alters page size
 ## classes: 
 - text: 2.0
 - margin: 1.0
-- image: 3.0
+- image: 0.0
 
 ## actions: 
 - masks class

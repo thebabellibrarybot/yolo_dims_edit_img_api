@@ -28,9 +28,9 @@ def crop_image(img, buk, dims):
         img_bytes = BytesIO()
         padded_image.save(img_bytes, format='JPEG')
         img_bytes.seek(0)
-        cropped_key = cropped_key.replace(' ', '+')
+        cropped_key = cropped_key.replace(' ', '_').replace('+', '%2B').replace(',','_')
         s3.put_object(Bucket=s3_bucket, Key=cropped_key, Body=img_bytes)
-        out[cropped_key] = {s3_bucket: f'https://cropped_{s3_bucket}.s3.amazonaws.com/{cropped_key}'}
+        out[cropped_key] = {s3_bucket: f'https://{s3_bucket}.s3.amazonaws.com/{cropped_key}'}
     return out   
 
 
