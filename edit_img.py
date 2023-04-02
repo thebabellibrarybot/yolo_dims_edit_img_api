@@ -1,5 +1,5 @@
 import boto3
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageDraw
 from io import BytesIO
 
 def crop_image(img, buk, dims):
@@ -19,20 +19,28 @@ def crop_image(img, buk, dims):
         img_data = img_object['Body'].read()
         img_pil = Image.open(BytesIO(img_data))
         img_pil = img_pil.resize((640, 640))
+
+        # mask to 640x640 sz
+        # Create a mask to keep everything inside the bounding box
+        mask = Image.new('L', img_pil.size, color=0)
+        draw = ImageDraw.Draw(mask)
+        draw.rectangle(dim, fill=255)
+
+        # Apply the mask to the image to set everything outside of the bounding box to white
+        masked_image = Image.new('RGBA', img_pil.size, color=(255, 255, 255, 255))
+        masked_image.paste(img_pil, mask=mask)
         
-        # crop image to dims but keep same size of original image with white background and cropped section in the same position on the page
-        img_crop = img_pil.crop((dim[0], dim[1], dim[2], dim[3]))
-        padded_image = ImageOps.expand(img_crop, border=10, fill=(255))
+        # save and upload actions
         cl = str(dims.keys()).replace('dict_keys', '').replace('([', '').replace('])', '')
         cropped_key = 'cropped_' + cl + '_' + s3_img_key
         img_bytes = BytesIO()
-        padded_image.save(img_bytes, format='JPEG')
+        masked_image = masked_image.convert('RGB')
+        masked_image.save(img_bytes, format='JPEG')
         img_bytes.seek(0)
         cropped_key = cropped_key.replace(' ', '_').replace('+', '%2B').replace(',','_')
         s3.put_object(Bucket=s3_bucket, Key=cropped_key, Body=img_bytes)
         out[cropped_key] = {s3_bucket: f'https://{s3_bucket}.s3.amazonaws.com/{cropped_key}'}
-    return out   
-
+    return out
 
 def mask_img(img, buk, dims):
     s3_img_key = img

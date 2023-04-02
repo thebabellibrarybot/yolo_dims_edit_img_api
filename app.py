@@ -1,12 +1,12 @@
-e = {
-    "body": {
-    "key":"msm854_fol. 47(v,r) expell_fol1L.jpg",
-    "bucket": "msm854",
-    "coords": [{2.0: [191, 150, 462, 484]}, {1.0: [457, 213, 524, 440]}],
-    "class": 2.0,
-    "action": "crop"
-    }
-}
+#e = {
+#    "body": {
+#    "key":"msm854_fol. 47(v,r) expell_fol1L.jpg",
+#    "bucket": "msm854",
+#    "coords": [{2.0: [191, 150, 462, 484]}, {1.0: [457, 213, 524, 440]}],
+#    "class": 2.0,
+#    "action": "crop"
+#    }
+#}
 
 from edit_img import crop_image
 from edit_img import mask_img
@@ -32,5 +32,5 @@ def lambda_hanlder(event, context):
                 return s3url
     
 
-i = lambda_hanlder(e,context=None)
-print(i)
+#i = lambda_hanlder(e,context=None)
+#print(i)
