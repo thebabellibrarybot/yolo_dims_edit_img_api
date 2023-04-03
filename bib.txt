@@ -1,0 +1,8 @@
+zip app.zip app.py
+aws s3 cp app.zip s3://sage-made/lambda/layers/cropper/basic-crop/app.zip
+aws lambda create-function --function-name yolov5-lambda --handler app.lambda_handler --region us-east-1 --runtime python3.7 --role arn:aws:iam::597268614173:role/awslambdas3 --environment "Variables={BUCKET_NAME=$BUCKET_NAME,S3_KEY=$S3_KEY}" --code S3Bucket=sage-made,S3Key="/lambda/layers/cropper/basic-crop/app.zip"
+
+aws lambda create-function --function-name yolov5-lambda --handler app.lambda_handler --region us-east-1 --runtime python3.7 --role arn:aws:iam::597268614173:role/awslambdas3 --environment "Variables={BUCKET_NAME=$BUCKET_NAME,S3_KEY=$S3_KEY}" --code S3Bucket=sage-made,S3Key="/lambda/layers/cropper/basic-crop/app.zip"
+
+
+aws lambda update-function-configuration --function-name basic-crop --layers aws:lambda:us-east-1:597268614173:layer:cv2:1
