@@ -26,7 +26,8 @@ def crop_image(img, buk, dims):
 
         # Apply the mask to the image to set everything outside of the bounding box to white
         masked_image = cv2.bitwise_and(img, img, mask=mask)
-        
+        masked_image[np.where((masked_image==[0,0,0]).all(axis=2))] = [255, 255, 255] # change black to white
+
         # save and upload actions
         cl = str(dims.keys()).replace('dict_keys', '').replace('([', '').replace('])', '')
         cropped_key = 'cropped_' + cl + '_' + s3_img_key
